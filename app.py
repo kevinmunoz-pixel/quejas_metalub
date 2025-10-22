@@ -24,25 +24,27 @@ except Exception as e:
     st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
-st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon=":memo:", layout="centered")
+st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon="📝")
+st.title("📝 ML-RG-0037 Formulario de Quejas y Sugerencias")
+st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
 
-st.image("logo.png", width=150)
-st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
-st.markdown("---")
+# Fecha automática
+fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+st.write(f"📅 Fecha y hora: **{fecha}**")
 
-# Fecha y hora automática
-fecha = st.date_input("Fecha", datetime.now().date())
-hora = st.time_input("Hora", datetime.now().time())
-tipo_cliente = st.selectbox("Tipo de cliente", ["Externo", "Interno"])
+# Tipo de cliente
+tipo = st.radio("Seleccione el tipo de registro:", ["Externo", "Interno"])
 
-# Nombre/Área dinámico
+# Campo dinámico según tipo
 if tipo_cliente == "Externo":
     nombre_area = st.text_input("Nombre del Cliente o Área")
 else:
     nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
-
+    
 tipo_reporte = st.selectbox("Tipo de reporte", ["Queja", "Sugerencia"])
-descripcion = st.text_area("Descripción o detalle", height=150)
+
+# Detalle de la queja o sugerencia
+detalle = st.text_area("Describa brevemente la queja o sugerencia:")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
@@ -63,3 +65,4 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
