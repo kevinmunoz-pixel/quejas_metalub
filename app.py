@@ -46,7 +46,7 @@ else:
     nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
 # Queja y sugerencia
-Queja o Sugerencia = st.selectbox("Queja o Sugerencia", ["Queja", "Sugerencia"])
+Queja_Sugerencia = st.selectbox("Queja o Sugerencia", ["Queja", "Sugerencia"])
 
 # Detalle de la queja/sugerencia
 detalle = st.text_area("Detalle de la queja o sugerencia")
@@ -70,6 +70,7 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
 
 
