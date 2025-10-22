@@ -24,7 +24,9 @@ except Exception as e:
     st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
-st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon=":memo:", layout="centered")
+st.set_page_config(page_title="Registro de Quejas y Sugerencias", page_icon="📝")
+st.title("📝 ML-RG-0037 Formulario de Quejas y Sugerencias")
+st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
 
 st.image("logo.png", width=150)
 st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
@@ -44,8 +46,7 @@ else:
     nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
 # Queja y sugerencia
-queja = st.text_area("Queja")
-sugerencia = st.text_area("Sugerencia")
+Queja o Sugerencia = st.selectbox("Queja o Sugerencia", ["Queja", "Sugerencia"])
 
 # Detalle de la queja/sugerencia
 detalle = st.text_area("Detalle de la queja o sugerencia")
@@ -69,6 +70,7 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
 
 
