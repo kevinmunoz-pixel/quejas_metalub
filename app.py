@@ -21,13 +21,11 @@ try:
     sheet = client.open(sheet_name).sheet1
 except Exception as e:
     st.error(f"❌ Error al conectar con Google Sheets: {e}")
-    st.stop()
+    # st.stop()  # Coméntala temporalmente si querés probar la interfaz
 
 # ================= INTERFAZ STREAMLIT =================
-from datetime import datetime
-import streamlit as st
-
-st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon=":memo:", layout="centered")
+st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", 
+                   page_icon=":memo:", layout="centered")
 st.image("logo.png", width=150)
 st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
 st.markdown("---")
@@ -60,7 +58,7 @@ confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
-    if not nombre or not detalle:
+    if not nombre_area or not detalle:
         st.warning("⚠️ Por favor complete todos los campos obligatorios antes de enviar.")
     elif not confirmar:
         st.info("☑️ Debe confirmar que la información ingresada es correcta antes de enviar.")
@@ -69,20 +67,10 @@ if st.button("📤 Enviar registro"):
             registros = sheet.get_all_records()
             numero = len(registros) + 1
 
-            fila = [numero, fecha, tipo, nombre, detalle]
-
+            fila = [numero, fecha, hora, tipo_cliente, nombre_area, Queja_Sugerencia, detalle]
             sheet.append_row(fila)
+
             st.success(f"✅ Registro enviado con éxito. Número de solicitud: **{numero}**")
             st.balloons()
         except Exception as e:
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
-
-
-
-
-
-
-
-
-
-
