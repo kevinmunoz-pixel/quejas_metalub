@@ -55,8 +55,8 @@ confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
-    if not nombre or not detalle:
-        st.warning("⚠️ Por favor complete todos los campos obligatorios antes de enviar.")
+    if nombre_area.strip() == "" or queja.strip() == "":
+        st.error("Por favor completa todos los campos requeridos.")
     elif not confirmar:
         st.info("☑️ Debe confirmar que la información ingresada es correcta antes de enviar.")
     else:
@@ -72,6 +72,7 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
 
 
