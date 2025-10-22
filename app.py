@@ -24,28 +24,31 @@ except Exception as e:
     st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
-st.set_page_config(page_title="Registro de Quejas y Sugerencias", page_icon="📝")
-st.title("📝 Registro de Quejas y Sugerencias")
-st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
+st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon=":memo:", layout="centered")
 
-# Fecha automática
-fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-st.write(f"📅 Fecha y hora: **{fecha}**")
+st.image("logo.png", width=150)
+st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
+st.markdown("---")
+
+# Fecha y hora automática
+fecha = datetime.now().strftime("%Y-%m-%d")
+hora = datetime.now().strftime("%H:%M:%S")
 
 # Tipo de cliente
-tipo = st.radio("Seleccione el tipo de registro:", ["Externo", "Interno"])
+tipo_cliente = st.selectbox("Tipo de Cliente", ["Externo", "Interno"])
 
-# Campo dinámico según tipo
-if tipo == "Externo":
-    nombre = st.text_input("Nombre del cliente o empresa")
+# Nombre o Área según tipo
+if tipo_cliente == "Externo":
+    nombre_area = st.text_input("Nombre del Cliente o Área")
 else:
-    nombre = st.selectbox("Área interna", ["Producción", "Calidad", "Mantenimiento", "Laboratorio", "Administración"])
+    nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
-# Detalle de la queja o sugerencia
-detalle = st.text_area("Describa brevemente la queja o sugerencia:")
+# Queja y sugerencia
+queja = st.text_area("Queja")
+sugerencia = st.text_area("Sugerencia")
 
-# Confirmación
-confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
+# Detalle de la queja/sugerencia
+detalle = st.text_area("Detalle de la queja o sugerencia")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
@@ -66,5 +69,6 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
 
