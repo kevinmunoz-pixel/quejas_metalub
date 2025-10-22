@@ -24,8 +24,8 @@ except Exception as e:
     st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
-st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon="📝")
-st.title("📝 ML-RG-0037 Formulario de Quejas y Sugerencias")
+st.set_page_config(page_title="Registro de Quejas y Sugerencias", page_icon="📝")
+st.title("📝 Registro de Quejas y Sugerencias")
 st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
 
 # Fecha automática
@@ -36,15 +36,16 @@ st.write(f"📅 Fecha y hora: **{fecha}**")
 tipo = st.radio("Seleccione el tipo de registro:", ["Externo", "Interno"])
 
 # Campo dinámico según tipo
-if tipo_cliente == "Externo":
-    nombre_area = st.text_input("Nombre del Cliente o Área")
+if tipo == "Externo":
+    nombre = st.text_input("Nombre del cliente o empresa")
 else:
-    nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
-    
-tipo_reporte = st.selectbox("Tipo de reporte", ["Queja", "Sugerencia"])
+    nombre = st.selectbox("Área interna", ["Producción", "Calidad", "Mantenimiento", "Laboratorio", "Administración"])
 
 # Detalle de la queja o sugerencia
 detalle = st.text_area("Describa brevemente la queja o sugerencia:")
+
+# Confirmación
+confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
@@ -65,4 +66,5 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
