@@ -24,17 +24,13 @@ except Exception as e:
     st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
-st.set_page_config(page_title="Registro de Quejas y Sugerencias", page_icon="📝")
-st.title("📝 ML-RG-0037 Formulario de Quejas y Sugerencias")
+st.image("logo.png", width=150)
+st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon="📝")
 st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
 
-st.image("logo.png", width=150)
-st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
-st.markdown("---")
-
 # Fecha y hora automática
-fecha = datetime.now().strftime("%Y-%m-%d")
-hora = datetime.now().strftime("%H:%M:%S")
+fecha = st.date_input("Fecha", datetime.now().date())
+hora = st.time_input("Hora", datetime.now().time())
 
 # Tipo de cliente
 tipo_cliente = st.selectbox("Tipo de Cliente", ["Externo", "Interno"])
@@ -50,6 +46,9 @@ Queja_Sugerencia = st.selectbox("Queja o Sugerencia", ["Queja", "Sugerencia"])
 
 # Detalle de la queja/sugerencia
 detalle = st.text_area("Detalle de la queja o sugerencia")
+
+# Confirmación
+confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
@@ -70,6 +69,7 @@ if st.button("📤 Enviar registro"):
         except Exception as e:
 
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
 
 
