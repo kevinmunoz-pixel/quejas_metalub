@@ -24,16 +24,21 @@ except Exception as e:
     st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
+from datetime import datetime
+import streamlit as st
 
+st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon=":memo:", layout="centered")
 st.image("logo.png", width=150)
 st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
 st.markdown("---")
-st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", page_icon=":memo:", layout="centered")
 st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
 
 # Fecha y hora automática
 fecha = datetime.now().strftime("%Y-%m-%d")
 hora = datetime.now().strftime("%H:%M:%S")
+
+st.write(f"**Fecha:** {fecha}")
+st.write(f"**Hora:** {hora}")
 
 # Tipo de cliente
 tipo_cliente = st.selectbox("Tipo de Cliente", ["Externo", "Interno"])
@@ -44,10 +49,10 @@ if tipo_cliente == "Externo":
 else:
     nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
-# Queja y sugerencia
+# Queja o Sugerencia
 Queja_Sugerencia = st.selectbox("Queja o Sugerencia", ["Queja", "Sugerencia"])
 
-# Detalle de la queja/sugerencia
+# Detalle
 detalle = st.text_area("Detalle de la queja o sugerencia")
 
 # Confirmación
@@ -55,8 +60,8 @@ confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
-    if nombre_area.strip() == "" or queja.strip() == "":
-        st.error("Por favor completa todos los campos requeridos.")
+    if not nombre or not detalle:
+        st.warning("⚠️ Por favor complete todos los campos obligatorios antes de enviar.")
     elif not confirmar:
         st.info("☑️ Debe confirmar que la información ingresada es correcta antes de enviar.")
     else:
@@ -70,8 +75,8 @@ if st.button("📤 Enviar registro"):
             st.success(f"✅ Registro enviado con éxito. Número de solicitud: **{numero}**")
             st.balloons()
         except Exception as e:
-
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
+
 
 
 
