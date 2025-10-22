@@ -31,24 +31,18 @@ st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
 st.markdown("---")
 
 # Fecha y hora automática
-fecha = datetime.now().strftime("%Y-%m-%d")
-hora = datetime.now().strftime("%H:%M:%S")
+fecha = st.date_input("Fecha", datetime.now().date())
+hora = st.time_input("Hora", datetime.now().time())
+tipo_cliente = st.selectbox("Tipo de cliente", ["Externo", "Interno"])
 
-# Tipo de cliente
-tipo = st.radio("Seleccione el tipo de registro:", ["Externo", "Interno"])
-
-# Campo dinámico según tipo
-if tipo == "Externo":
-    nombre = st.text_input("Nombre del cliente o empresa")
+# Nombre/Área dinámico
+if tipo_cliente == "Externo":
+    nombre_area = st.text_input("Nombre del Cliente o Área")
 else:
-    nombre = st.selectbox("Área interna", ["Producción", "Calidad"])
+    nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
-# Queja y sugerencia
-queja = st.text_area("Queja")
-sugerencia = st.text_area("Sugerencia")
-
-# Detalle de la queja o sugerencia
-detalle = st.text_area("Describa brevemente la queja o sugerencia:")
+tipo_reporte = st.selectbox("Tipo de reporte", ["Queja", "Sugerencia"])
+descripcion = st.text_area("Descripción o detalle", height=150)
 
 # ================= ENVÍO =================
 if st.button("📤 Enviar registro"):
@@ -67,4 +61,5 @@ if st.button("📤 Enviar registro"):
             st.success(f"✅ Registro enviado con éxito. Número de solicitud: **{numero}**")
             st.balloons()
         except Exception as e:
+
             st.error(f"❌ Ocurrió un error al guardar en Google Sheets: {e}")
