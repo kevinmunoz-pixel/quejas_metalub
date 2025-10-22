@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # ================= CONFIGURACIÓN GOOGLE SHEETS =================
 try:
@@ -21,19 +21,24 @@ try:
     sheet = client.open(sheet_name).sheet1
 except Exception as e:
     st.error(f"❌ Error al conectar con Google Sheets: {e}")
-    # st.stop()  # Coméntala temporalmente si querés probar la interfaz
+    # st.stop()  # podés descomentarla si querés detener la app en caso de error
 
 # ================= INTERFAZ STREAMLIT =================
-st.set_page_config(page_title="ML-RG-0037 Formulario de Quejas y Sugerencias", 
-                   page_icon=":memo:", layout="centered")
+st.set_page_config(
+    page_title="ML-RG-0037 Formulario de Quejas y Sugerencias",
+    page_icon=":memo:",
+    layout="centered"
+)
+
 st.image("logo.png", width=150)
 st.title("ML-RG-0037 Formulario de Quejas y Sugerencias")
 st.markdown("---")
 st.write("Por favor complete el siguiente formulario para registrar su queja o sugerencia.")
 
-# Fecha y hora automática
-fecha = datetime.now().strftime("%Y-%m-%d")
-hora = datetime.now().strftime("%H:%M:%S")
+# Fecha y hora automática ajustada a Costa Rica (UTC-6)
+ahora = datetime.utcnow() - timedelta(hours=6)
+fecha = ahora.strftime("%Y-%m-%d")
+hora = ahora.strftime("%H:%M:%S")
 
 st.write(f"**Fecha:** {fecha}")
 st.write(f"**Hora:** {hora}")
@@ -48,7 +53,7 @@ else:
     nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
 # Queja o Sugerencia
-Queja_Sugerencia = st.selectbox("Queja o Sugerencia", ["Queja", "Sugerencia"])
+Queja_Sugerencia = st.selectbox("Tipo de Registro", ["Queja", "Sugerencia"])
 
 # Detalle
 detalle = st.text_area("Detalle de la queja o sugerencia")
@@ -67,9 +72,10 @@ if st.button("📤 Enviar registro"):
             registros = sheet.get_all_records()
             numero = len(registros) + 1
 
+            # Orden de columnas en Google Sheets
             fila = [numero, fecha, hora, tipo_cliente, nombre_area, Queja_Sugerencia, detalle]
-            sheet.append_row(fila)
 
+            sheet.append_row(fila)
             st.success(f"✅ Registro enviado con éxito. Número de solicitud: **{numero}**")
             st.balloons()
         except Exception as e:
