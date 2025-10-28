@@ -19,9 +19,26 @@ try:
 
     sheet_name = "ML-RG-0040 Registro de Quejas y Sugerencias"
     sheet = client.open(sheet_name).sheet1
+
+    # 🔧 Validar encabezados automáticamente
+    encabezados_correctos = [
+        "No. Solicitud",
+        "Fecha",
+        "Hora",
+        "Tipo de Cliente",
+        "Nombre del Cliente o Área",
+        "Tipo de Reporte",
+        "Descripción"
+    ]
+
+    headers_actuales = sheet.row_values(1)
+    if headers_actuales != encabezados_correctos:
+        sheet.delete_rows(1)  # elimina encabezado incorrecto
+        sheet.insert_row(encabezados_correctos, 1)
+
 except Exception as e:
     st.error(f"❌ Error al conectar con Google Sheets: {e}")
-    # st.stop()  # podés descomentarla si querés detener la app en caso de error
+    st.stop()
 
 # ================= INTERFAZ STREAMLIT =================
 st.set_page_config(
@@ -52,11 +69,11 @@ if tipo_cliente == "Externo":
 else:
     nombre_area = st.selectbox("Nombre del Cliente o Área", ["Producción", "Calidad"])
 
-# Queja o Sugerencia
-Queja_Sugerencia = st.selectbox("Tipo de Registro", ["Queja", "Sugerencia"])
+# Tipo de Reporte
+tipo_reporte = st.selectbox("Tipo de Reporte", ["Queja", "Sugerencia"])
 
-# Detalle
-detalle = st.text_area("Detalle de la queja o sugerencia")
+# Descripción
+detalle = st.text_area("Descripción de la queja o sugerencia")
 
 # Confirmación
 confirmar = st.checkbox("Confirmo que la información ingresada es correcta")
@@ -73,7 +90,7 @@ if st.button("📤 Enviar registro"):
             numero = len(registros) + 1
 
             # Orden de columnas en Google Sheets
-            fila = [numero, fecha, hora, tipo_cliente, nombre_area, Queja_Sugerencia, detalle]
+            fila = [numero, fecha, hora, tipo_cliente, nombre_area, tipo_reporte, detalle]
 
             sheet.append_row(fila)
             st.success(f"✅ Registro enviado con éxito. Número de solicitud: **{numero}**")
