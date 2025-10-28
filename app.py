@@ -20,7 +20,7 @@ try:
     sheet_name = "ML-RG-0040 Registro de Quejas y Sugerencias"
     sheet = client.open(sheet_name).sheet1
 
-    # 🔧 Validar encabezados automáticamente
+    # 🔧 Encabezados correctos esperados
     encabezados_correctos = [
         "No. Solicitud",
         "Fecha",
@@ -31,9 +31,14 @@ try:
         "Descripción"
     ]
 
+    # Leer encabezado actual
     headers_actuales = sheet.row_values(1)
-    if headers_actuales != encabezados_correctos:
-        sheet.delete_rows(1)  # elimina encabezado incorrecto
+
+    # Si la primera fila está vacía o no coincide, la reescribimos
+    if not headers_actuales or any(h.strip() == "" for h in headers_actuales) or headers_actuales != encabezados_correctos:
+        # Limpia encabezado incorrecto
+        sheet.delete_rows(1)
+        # Inserta el encabezado correcto
         sheet.insert_row(encabezados_correctos, 1)
 
 except Exception as e:
@@ -86,7 +91,15 @@ if st.button("📤 Enviar registro"):
         st.info("☑️ Debe confirmar que la información ingresada es correcta antes de enviar.")
     else:
         try:
-            registros = sheet.get_all_records()
+            registros = sheet.get_all_records(expected_headers=[
+                "No. Solicitud",
+                "Fecha",
+                "Hora",
+                "Tipo de Cliente",
+                "Nombre del Cliente o Área",
+                "Tipo de Reporte",
+                "Descripción"
+            ])
             numero = len(registros) + 1
 
             # Orden de columnas en Google Sheets
